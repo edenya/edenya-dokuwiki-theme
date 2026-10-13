@@ -1,0 +1,420 @@
+/*
+ *	Thème « Edenya V5 » du wiki : les jetons du site (_styles/tokens.css), recopiés ici
+ *	parce que le wiki ne charge pas les feuilles du site. Mêmes noms, mêmes valeurs :
+ *	une couleur changée dans tokens.css se reporte ici.
+ *
+ *	style.ini renvoie les couleurs de DokuWiki (__text__, __link__…) vers ces variables ;
+ *	le thème sombre suit la préférence du système (le wiki n'a pas de préférence de compte).
+ */
+
+@font-face {
+	font-family: 'Cinzel';
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url(fonts/cinzel-latin.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212;
+}
+
+@font-face {
+	font-family: 'Cinzel';
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url(fonts/cinzel-latin-ext.woff2) format('woff2');
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+	font-family: 'EB Garamond';
+	font-style: normal;
+	font-weight: 400 800;
+	font-display: swap;
+	src: url(fonts/ebgaramond-latin.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212;
+}
+
+@font-face {
+	font-family: 'EB Garamond';
+	font-style: normal;
+	font-weight: 400 800;
+	font-display: swap;
+	src: url(fonts/ebgaramond-latin-ext.woff2) format('woff2');
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+	font-family: 'EB Garamond';
+	font-style: italic;
+	font-weight: 400 800;
+	font-display: swap;
+	src: url(fonts/ebgaramond-italic-latin.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212;
+}
+
+@font-face {
+	font-family: 'EB Garamond';
+	font-style: italic;
+	font-weight: 400 800;
+	font-display: swap;
+	src: url(fonts/ebgaramond-italic-latin-ext.woff2) format('woff2');
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* -- Jetons : thème clair -------------------------------------------------- */
+
+:root {
+	color-scheme: light;
+	--police-titre: 'Cinzel', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+	--police-texte: 'EB Garamond', Georgia, 'Times New Roman', Times, serif;
+	--police-mono: 'Cascadia Mono', Consolas, 'Courier New', monospace;
+	--rayon-s: 3px;
+	--rayon-m: 6px;
+	--ombre-1: 0 1px 2px rgba(24, 14, 4, 0.18);
+	--ombre-2: 0 4px 14px rgba(24, 14, 4, 0.28);
+
+	--texture-claire: url(images/ground-light.jpg);
+	--foret-entete: url(images/foret_jour.png);
+	--voile-surface: rgba(250, 240, 222, 0.12);
+
+	--fond-page: #6f5233;
+	--parchemin: #f3e7cd;
+	--surface-haute: #fbf4e3;
+	--encre: #2c2016;
+	--encre-douce: #54422c;
+	--encre-tenue: #6f5a3d;
+	--texte-sur-image: #f6ecd8;
+	--entete-panneau: rgba(0, 12, 0, 0.94);
+	--bordure: #b9915a;
+	--bordure-douce: rgba(112, 78, 36, 0.28);
+	--bordure-forte: #8a6633;
+	--or: #9a6f22;
+	--or-clair: #c79a3f;
+	--or-texte: #64420c;
+	--or-voile: rgba(154, 111, 34, 0.14);
+	--surbrillance: rgba(154, 111, 34, 0.3);
+	--lien: #10521f;
+	--lien-survol: #17702d;
+	--lien-visite: #4a5e1c;
+	--focus: #9a6f22;
+	--champ-fond: #fdf7e9;
+	--champ-bordure: #a78751;
+	--champ-texte: #2c2016;
+	--erreur: #8f2119;
+	--erreur-fond: #f6ddd6;
+	--succes: #1d6b2c;
+	--succes-fond: #dcefd9;
+	--alerte: #8a6212;
+	--alerte-fond: #f8ecc9;
+	--info: #24557f;
+	--info-fond: #dbe7f3;
+}
+
+/* -- Jetons : thème sombre (préférence du système) ------------------------- */
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		color-scheme: dark;
+		--texture-claire: url(images/ground-dark.jpg);
+		--foret-entete: url(images/foret_nuit.png);
+		--voile-surface: rgba(34, 25, 17, 0.88);
+
+		--fond-page: #1a130c;
+		--parchemin: #241a12;
+		--surface-haute: #2f2317;
+		--encre: #ecdcbe;
+		--encre-douce: #b9a382;
+		--encre-tenue: #94805f;
+		--bordure: #6d5432;
+		--bordure-douce: rgba(216, 178, 116, 0.22);
+		--bordure-forte: #8a6b3c;
+		--or: #d9a94a;
+		--or-clair: #f0c977;
+		--or-texte: #e7bb6a;
+		--or-voile: rgba(217, 169, 74, 0.16);
+		--surbrillance: rgba(217, 169, 74, 0.26);
+		--lien: #86cc92;
+		--lien-survol: #b2e5ba;
+		--lien-visite: #9dbb74;
+		--focus: #d9a94a;
+		--champ-fond: #17110b;
+		--champ-bordure: #6d5432;
+		--champ-texte: #ecdcbe;
+		--erreur: #ef9a90;
+		--erreur-fond: #3c1c17;
+		--succes: #9bd9a3;
+		--succes-fond: #17321a;
+		--alerte: #e8c477;
+		--alerte-fond: #3a2c10;
+		--info: #9cc3e8;
+		--info-fond: #17283a;
+	}
+}
+
+/* -- Page ------------------------------------------------------------------ */
+
+html,
+body {
+	background: var(--fond-page);
+}
+
+body,
+.dokuwiki,
+.dokuwiki input,
+.dokuwiki textarea,
+.dokuwiki select,
+.dokuwiki button {
+	font-family: var(--police-texte);
+}
+
+body {
+	font-size: 112.5%;
+	line-height: 1.6;
+}
+
+.dokuwiki ::selection {
+	background: var(--surbrillance);
+}
+
+.dokuwiki a:focus-visible,
+.dokuwiki button:focus-visible,
+.dokuwiki input:focus-visible,
+.dokuwiki textarea:focus-visible {
+	outline: 2px solid var(--focus);
+	outline-offset: 2px;
+}
+
+/* -- En-tête : la forêt du site, voilée pour que le texte reste lisible ------ */
+
+#dokuwiki__header {
+	position: relative;
+	margin-bottom: 1em;
+	padding: 1.25em 1em 0.75em;
+	background: var(--entete-panneau) var(--foret-entete) center bottom / cover no-repeat;
+	border-bottom: 2px solid var(--bordure-forte);
+	border-radius: 0 0 var(--rayon-m) var(--rayon-m);
+	box-shadow: var(--ombre-2);
+}
+
+#dokuwiki__header::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: linear-gradient(180deg, rgba(0, 12, 0, 0.6) 0%, rgba(0, 12, 0, 0.3) 55%, rgba(0, 12, 0, 0.7) 100%);
+	pointer-events: none;
+}
+
+#dokuwiki__header > .pad {
+	position: relative;
+	z-index: 1;
+}
+
+#dokuwiki__header h1 a,
+#dokuwiki__header h1 a:hover,
+#dokuwiki__header h1 a:visited {
+	color: var(--texte-sur-image);
+	font-family: var(--police-titre);
+	letter-spacing: 0.04em;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+#dokuwiki__header h1 span::before {
+	content: 'Edenya — le wiki';
+}
+
+#dokuwiki__header .claim,
+#dokuwiki__header .breadcrumbs,
+#dokuwiki__header .breadcrumbs .bchead,
+#dokuwiki__header .tools ul li,
+#dokuwiki__header .tools ul li a,
+#dokuwiki__header .tools ul li a:visited {
+	color: var(--texte-sur-image);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+#dokuwiki__header .tools ul li a:hover,
+#dokuwiki__header .breadcrumbs a:hover {
+	color: var(--or-clair);
+}
+
+#dokuwiki__header .breadcrumbs {
+	border-color: rgba(246, 236, 216, 0.25);
+}
+
+#dokuwiki__header .tools input.edit,
+#dokuwiki__header .tools select {
+	background: var(--champ-fond);
+	color: var(--champ-texte);
+	border-color: var(--champ-bordure);
+}
+
+/* -- Contenu : parchemin -------------------------------------------------- */
+
+.dokuwiki div.wrapper {
+	gap: 1em;
+}
+
+.dokuwiki div.page {
+	background: linear-gradient(var(--voile-surface), var(--voile-surface)), var(--texture-claire);
+	background-color: var(--parchemin);
+	border: 1px solid var(--bordure);
+	border-radius: var(--rayon-m);
+	box-shadow: var(--ombre-1);
+}
+
+#dokuwiki__aside > .pad {
+	background: var(--surface-haute);
+	border: 1px solid var(--bordure-douce);
+	border-radius: var(--rayon-m);
+	padding: 0.75em 1em;
+}
+
+.dokuwiki h1,
+.dokuwiki h2,
+.dokuwiki h3,
+.dokuwiki h4,
+.dokuwiki h5 {
+	font-family: var(--police-titre);
+	color: var(--or-texte);
+	line-height: 1.2;
+	font-weight: 600;
+}
+
+.dokuwiki h1 {
+	border-bottom: 2px solid var(--bordure);
+	padding-bottom: 0.2em;
+}
+
+.dokuwiki h2 {
+	border-bottom: 1px solid var(--bordure-douce);
+}
+
+.dokuwiki a:link,
+.dokuwiki a:visited {
+	color: var(--lien);
+}
+
+.dokuwiki a:hover,
+.dokuwiki a:active {
+	color: var(--lien-survol);
+}
+
+.dokuwiki .wikilink2:link,
+.dokuwiki .wikilink2:visited {
+	color: var(--erreur);
+}
+
+/* Tableaux, sommaire, encadrés */
+
+.dokuwiki table.inline {
+	background: var(--surface-haute);
+	border-color: var(--bordure-douce);
+}
+
+.dokuwiki table.inline th {
+	background: var(--or-voile);
+	color: var(--encre);
+	font-family: var(--police-titre);
+	font-weight: 600;
+}
+
+.dokuwiki table.inline th,
+.dokuwiki table.inline td {
+	border-color: var(--bordure-douce);
+}
+
+#dw__toc {
+	background: var(--surface-haute);
+	border: 1px solid var(--bordure-douce);
+	border-radius: var(--rayon-m);
+}
+
+#dw__toc h3 {
+	background: var(--or-voile);
+	font-family: var(--police-titre);
+	color: var(--or-texte);
+}
+
+.dokuwiki pre,
+.dokuwiki code,
+.dokuwiki tt {
+	font-family: var(--police-mono);
+	background: var(--surface-haute);
+	color: var(--encre);
+	border-color: var(--bordure-douce);
+}
+
+.dokuwiki blockquote {
+	border-left: 3px solid var(--or);
+	color: var(--encre-douce);
+}
+
+.dokuwiki hr {
+	border-color: var(--bordure);
+}
+
+/* Messages (info, succès, erreur, avertissement) */
+
+.dokuwiki div.info,
+.dokuwiki div.success,
+.dokuwiki div.error,
+.dokuwiki div.notify {
+	border-radius: var(--rayon-s);
+	border: 1px solid currentColor;
+}
+
+.dokuwiki div.info { color: var(--info); background-color: var(--info-fond); }
+.dokuwiki div.success { color: var(--succes); background-color: var(--succes-fond); }
+.dokuwiki div.error { color: var(--erreur); background-color: var(--erreur-fond); }
+.dokuwiki div.notify { color: var(--alerte); background-color: var(--alerte-fond); }
+
+/* Boutons et champs : ceux du site */
+
+.dokuwiki button,
+.dokuwiki input[type=submit],
+.dokuwiki input[type=button],
+.dokuwiki input[type=reset],
+.dokuwiki input.button,
+.dokuwiki a.button {
+	font-family: var(--police-titre);
+	background: var(--or);
+	color: var(--surface-haute);
+	border: 1px solid var(--bordure-forte);
+	border-radius: var(--rayon-s);
+}
+
+.dokuwiki button:hover,
+.dokuwiki input[type=submit]:hover,
+.dokuwiki input[type=button]:hover {
+	background: var(--or-clair);
+	color: var(--encre);
+}
+
+.dokuwiki input,
+.dokuwiki textarea,
+.dokuwiki select {
+	background-color: var(--champ-fond);
+	color: var(--champ-texte);
+	border-color: var(--champ-bordure);
+	border-radius: var(--rayon-s);
+}
+
+/* Outils de page (colonne de droite) */
+
+#dokuwiki__pagetools ul {
+	background-color: var(--surface-haute);
+	border-color: var(--bordure-douce);
+}
+
+/* -- Pied de page --------------------------------------------------------- */
+
+#dokuwiki__footer,
+#dokuwiki__footer a {
+	color: var(--texte-sur-image);
+}
+
+#dokuwiki__footer .license,
+#dokuwiki__footer .buttons {
+	opacity: 0.8;
+}
