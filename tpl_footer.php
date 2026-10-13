@@ -2,6 +2,9 @@
 
 /**
  * Template footer, included in the main and detail files
+ *
+ * Le pied de page ne dit pas la licence du wiki, ni en toutes lettres ni par son badge
+ * (propriétaire, 13 octobre 2026).
  */
 
 // must be run from within DokuWiki
@@ -10,11 +13,8 @@ if (!defined('DOKU_INC')) die();
 
 <!-- ********** FOOTER ********** -->
 <footer id="dokuwiki__footer"><div class="pad">
-    <?php tpl_license(''); // license text ?>
-
     <div class="buttons">
         <?php
-            tpl_license('button', true, false, false); // license button, no wrapper
             $target = ($conf['target']['extern']) ? 'target="' . $conf['target']['extern'] . '"' : '';
         ?>
         <a href="https://www.dokuwiki.org/donate" title="Donate" <?php echo $target?>><img

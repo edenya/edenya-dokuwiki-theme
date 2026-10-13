@@ -1,14 +1,11 @@
+/* Thème Edenya : dans le bandeau, au-dessus de la recherche (en position absolue, il passait dessous) */
 #dokuwiki__usertools {
-    position: absolute;
-    top: .5em;
-    right: 40px; // pagetool width
+    margin-bottom: .4em;
     text-align: right;
-    width: 100%;
 
     ul {
-        margin: 0 auto;
+        margin: 0;
         padding: 0;
-        max-width: @ini_site_width;
     }
 
     li.action a {
@@ -36,9 +33,6 @@
 
 [dir=rtl] #dokuwiki__usertools {
     text-align: left;
-    left: 40px; // pagetool width
-    right: auto;
-
 
     li.action a {
 

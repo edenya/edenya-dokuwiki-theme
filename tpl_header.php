@@ -2,6 +2,10 @@
 
 /**
  * Template header, included in the main and detail files
+ *
+ * Le logo d'Edenya mène à l'accueil du wiki ; c'est une image dans un lien, pas un titre (le h1
+ * est celui de la page, comme sur le site). Où l'on est dans le wiki se lit dans le fil d'Ariane,
+ * en tête de la page, et les pages consultées dans la colonne : le bandeau n'a plus de piste.
  */
 
 // must be run from within DokuWiki
@@ -13,28 +17,14 @@ if (!defined('DOKU_INC')) die();
 
     <?php tpl_includeFile('header.html') ?>
 
+    <ul class="a11y skip">
+        <li><a href="#dokuwiki__content"><?php echo $lang['skip_to_content']; ?></a></li>
+    </ul>
+
     <div class="headings group">
-        <ul class="a11y skip">
-            <li><a href="#dokuwiki__content"><?php echo $lang['skip_to_content']; ?></a></li>
-        </ul>
-
-        <h1 class="logo"><?php
-            // get logo either out of the template images folder or data/media folder
-            $logoSize = [];
-            $logo = tpl_getMediaFile([
-                ':wiki:logo.svg', ':logo.svg',
-                ':wiki:logo.png', ':logo.png',
-                'images/logo.svg', 'images/logo.png'
-            ], false, $logoSize);
-
-            // display logo and wiki title in a link to the home page
-            tpl_link(
-                wl(),
-                '<img src="' . $logo . '" ' . ($logoSize ? $logoSize[3] : '') . ' alt="" />' .
-                '<span>' . $conf['title'] . '</span>',
-                'accesskey="h" title="' . tpl_getLang('home') . ' [h]"'
-            );
-            ?></h1>
+        <a class="logo" href="<?php echo wl() ?>" rel="home" accesskey="h" title="<?php
+            echo hsc(tpl_getLang('accueil_du_wiki')) ?> [h]"><img src="<?php echo tpl_basedir() ?>images/edenya.webp"
+            width="460" height="200" alt="Edenya" /><span><?php echo hsc(tpl_getLang('le_wiki')) ?></span></a>
         <?php if ($conf['tagline']) : ?>
             <p class="claim"><?php echo $conf['tagline']; ?></p>
         <?php endif ?>
@@ -66,23 +56,14 @@ if (!defined('DOKU_INC')) die();
                 <?php echo (new \dokuwiki\Menu\MobileMenu())->getDropdown($lang['tools']); ?>
             </div>
             <ul>
+                <li class="wiki-site"><a href="<?php
+                    // Le site est à la racine du domaine, le wiki dans son dossier /wiki/
+                    echo hsc(preg_replace('#[^/]+/$#', '', DOKU_BASE)) ?>"><?php echo hsc(tpl_getLang('le_site')) ?></a></li>
                 <?php echo (new \dokuwiki\Menu\SiteMenu())->getListItems('action ', false); ?>
             </ul>
         </div>
 
     </div>
-
-    <!-- BREADCRUMBS -->
-    <?php if ($conf['breadcrumbs'] || $conf['youarehere']) : ?>
-        <div class="breadcrumbs">
-            <?php if ($conf['youarehere']) : ?>
-                <div class="youarehere"><?php tpl_youarehere() ?></div>
-            <?php endif ?>
-            <?php if ($conf['breadcrumbs']) : ?>
-                <div class="trace"><?php tpl_breadcrumbs() ?></div>
-            <?php endif ?>
-        </div>
-    <?php endif ?>
 
     <hr class="a11y" />
 </div></header><!-- /header -->

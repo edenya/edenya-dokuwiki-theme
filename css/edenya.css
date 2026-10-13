@@ -5,6 +5,12 @@
  *
  *	style.ini renvoie les couleurs de DokuWiki (__text__, __link__…) vers ces variables ;
  *	le thème sombre suit la préférence du système (le wiki n'a pas de préférence de compte).
+ *
+ *	Où l'on est se lit comme sur le site (.docs/DESIGN.md, « Où l'on est ») : le sommaire du
+ *	wiki, en boîte dans la colonne, marque sa rubrique et la page affichée (aria-current, en gras
+ *	à l'encre) ; le fil d'Ariane ouvre la page ; les pages consultées ont leur boîte à part, sous
+ *	le sommaire, pour ne pas passer pour un fil d'Ariane ; la table des matières suit la lecture.
+ *	Règle du propriétaire (13 octobre 2026) : les liens du texte d'une page sont soulignés.
  */
 
 @font-face {
@@ -72,6 +78,13 @@
 	--rayon-m: 6px;
 	--ombre-1: 0 1px 2px rgba(24, 14, 4, 0.18);
 	--ombre-2: 0 4px 14px rgba(24, 14, 4, 0.28);
+	--ombre-texte-image: 0 1px 3px rgba(0, 0, 0, 0.8);
+	--transition: 0.15s ease;
+
+	/* Gabarit (structure.less) : la page, la colonne de navigation, la table des matières */
+	--largeur-page: __site_width__;
+	--largeur-colonne: __sidebar_width__;
+	--largeur-toc: 15em;
 
 	--texture-claire: url(images/ground-light.jpg);
 	--foret-entete: url(images/foret_jour.png);
@@ -151,6 +164,30 @@
 	}
 }
 
+/* -- Écrans larges : les paliers du site et du jeu --------------------------
+ *	Leur seuil est celui de l'écran visé moins la barre de défilement : une fenêtre maximisée
+ *	sur un écran de 1920px n'offre que ~1910px. Du plus étroit au plus large. La page s'élargit,
+ *	les colonnes aussi, pour que les lignes du texte ne s'allongent pas trop.
+ */
+
+/* Écrans de 1920px */
+@media (min-width: 1900px) {
+	:root {
+		--largeur-page: 1600px;
+		--largeur-colonne: 18em;
+		--largeur-toc: 17em;
+	}
+}
+
+/* Écrans de 2560px et au-delà */
+@media (min-width: 2540px) {
+	:root {
+		--largeur-page: 1920px;
+		--largeur-colonne: 20em;
+		--largeur-toc: 19em;
+	}
+}
+
 /* -- Page ------------------------------------------------------------------ */
 
 html,
@@ -177,6 +214,7 @@ body {
 }
 
 .dokuwiki a:focus-visible,
+.dokuwiki summary:focus-visible,
 .dokuwiki button:focus-visible,
 .dokuwiki input:focus-visible,
 .dokuwiki textarea:focus-visible {
@@ -210,36 +248,39 @@ body {
 	z-index: 1;
 }
 
-#dokuwiki__header h1 a,
-#dokuwiki__header h1 a:hover,
-#dokuwiki__header h1 a:visited {
-	color: var(--texte-sur-image);
+/*	Le logo du site, « Le wiki » dessous, écrit comme « Administration » au back-office
+ *	(admin/screen.css) ; le logo s'illumine au survol, comme sur le site. */
+#dokuwiki__header .logo span {
+	margin-top: -0.5rem;
+	color: var(--or-clair);
 	font-family: var(--police-titre);
-	letter-spacing: 0.04em;
-	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+	font-size: 0.75rem;
+	letter-spacing: 0.24em;
+	text-align: center;
+	text-transform: uppercase;
+	text-shadow: var(--ombre-texte-image);
 }
 
-#dokuwiki__header h1 span::before {
-	content: 'Edenya — le wiki';
+#dokuwiki__header .logo img {
+	transition: filter var(--transition);
+}
+
+#dokuwiki__header .logo:hover img,
+#dokuwiki__header .logo:focus-visible img {
+	filter: drop-shadow(0 0 6px var(--or-clair));
 }
 
 #dokuwiki__header .claim,
-#dokuwiki__header .breadcrumbs,
-#dokuwiki__header .breadcrumbs .bchead,
+#dokuwiki__header .skip a,
 #dokuwiki__header .tools ul li,
 #dokuwiki__header .tools ul li a,
 #dokuwiki__header .tools ul li a:visited {
 	color: var(--texte-sur-image);
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+	text-shadow: var(--ombre-texte-image);
 }
 
-#dokuwiki__header .tools ul li a:hover,
-#dokuwiki__header .breadcrumbs a:hover {
+#dokuwiki__header .tools ul li a:hover {
 	color: var(--or-clair);
-}
-
-#dokuwiki__header .breadcrumbs {
-	border-color: rgba(246, 236, 216, 0.25);
 }
 
 #dokuwiki__header .tools input.edit,
@@ -251,23 +292,14 @@ body {
 
 /* -- Contenu : parchemin -------------------------------------------------- */
 
-.dokuwiki div.wrapper {
-	gap: 1em;
-}
-
-.dokuwiki div.page {
+.dokuwiki div.page,
+.wiki-boite,
+.js .wiki-bascule {
 	background: linear-gradient(var(--voile-surface), var(--voile-surface)), var(--texture-claire);
 	background-color: var(--parchemin);
 	border: 1px solid var(--bordure);
 	border-radius: var(--rayon-m);
 	box-shadow: var(--ombre-1);
-}
-
-#dokuwiki__aside > .pad {
-	background: var(--surface-haute);
-	border: 1px solid var(--bordure-douce);
-	border-radius: var(--rayon-m);
-	padding: 0.75em 1em;
 }
 
 .dokuwiki h1,
@@ -303,6 +335,307 @@ body {
 .dokuwiki .wikilink2:link,
 .dokuwiki .wikilink2:visited {
 	color: var(--erreur);
+}
+
+/* Les liens du texte d'une page : soulignés, du trait du site (une page absente a ses tirets) */
+.dokuwiki.mode_show div.page :is(p, div.li, td, th, dd, div.fn) a:not(.wikilink2),
+.dokuwiki div.preview :is(p, div.li, td, th, dd, div.fn) a:not(.wikilink2) {
+	text-decoration: underline;
+	text-decoration-color: var(--bordure);
+	text-underline-offset: 0.15em;
+}
+
+.dokuwiki.mode_show div.page :is(p, div.li, td, th, dd, div.fn) a:not(.wikilink2):is(:hover, :focus),
+.dokuwiki div.preview :is(p, div.li, td, th, dd, div.fn) a:not(.wikilink2):is(:hover, :focus) {
+	text-decoration-color: var(--lien-survol);
+}
+
+/* -- Fil d'Ariane : où l'on est dans le sommaire, en tête de la page --------- */
+
+.wiki-fil-ariane {
+	margin: -0.5em 0 1em;
+	font-size: 0.9em;
+	line-height: 1.4;
+}
+
+.wiki-fil-ariane ol {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.2em 0;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wiki-fil-ariane li {
+	display: inline-flex;
+	align-items: center;
+	margin: 0;
+}
+
+/* Un chevron entre deux étapes, dessiné : rien à lire pour un lecteur d'écran */
+.wiki-fil-ariane li + li::before {
+	content: '';
+	width: 0.4em;
+	height: 0.4em;
+	margin: 0 0.65em 0 0.4em;
+	border-top: 1.5px solid var(--encre-tenue);
+	border-right: 1.5px solid var(--encre-tenue);
+	transform: rotate(45deg);
+}
+
+.wiki-fil-ariane a,
+.wiki-fil-ariane span {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3em;
+}
+
+.wiki-fil-ariane [aria-current="page"] {
+	color: var(--encre);
+	font-weight: 600;
+}
+
+.wiki-icone {
+	flex: none;
+	width: 1.15em;
+	height: 1.15em;
+	fill: currentColor;
+}
+
+/* -- Colonne de navigation : le sommaire du wiki, les pages consultées ------- */
+
+.wiki-navigation {
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
+}
+
+.wiki-boite {
+	padding: 0.5em 0.75em 0.75em;
+	font-size: 0.95em;
+}
+
+/* Le titre d'une boîte : centré sur un filet, une étoile dessous (les boîtes du site) */
+.dokuwiki .wiki-boite > h2 {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 0.35em;
+	margin: 0 -0.75em 0.6em;
+	padding: 0.15em 0.75em 0.4em;
+	border-bottom: 1px solid var(--bordure);
+	font-size: 1.05em;
+	letter-spacing: 0.06em;
+	text-align: center;
+}
+
+.dokuwiki .wiki-boite > h2::after {
+	content: '\2726';
+	flex-basis: 100%;
+	color: var(--bordure);
+	font-size: 0.7em;
+	line-height: 1;
+}
+
+.wiki-boite ul,
+.wiki-boite ol {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wiki-boite li {
+	margin: 0;
+}
+
+.wiki-navigation a {
+	display: flex;
+	align-items: center;
+	gap: 0.35em;
+	padding: 0.15em 0.5em;
+	border-left: 3px solid transparent;
+	border-radius: 0 var(--rayon-s) var(--rayon-s) 0;
+	line-height: 1.3;
+}
+
+.wiki-navigation a:hover {
+	background: var(--or-voile);
+}
+
+/* La page où l'on est : en gras à l'encre (le sommaire du site), et un trait doré devant */
+.dokuwiki .wiki-navigation a[aria-current="page"] {
+	color: var(--encre);
+	font-weight: 600;
+	background: var(--or-voile);
+	border-left-color: var(--or);
+}
+
+.wiki-sommaire__accueil {
+	margin-bottom: 0.35em;
+}
+
+/* Une rubrique du sommaire se déplie ; celle de la page affichée est ouverte et dorée */
+.wiki-rubrique {
+	margin: 0;
+	border-top: 1px solid var(--bordure-douce);
+}
+
+.wiki-rubrique > summary {
+	position: relative;
+	padding: 0.35em 0.25em 0.35em 1.3em;
+	color: var(--encre-douce);
+	font-weight: 600;
+	line-height: 1.3;
+	cursor: pointer;
+	list-style: none;
+}
+
+.wiki-rubrique > summary::-webkit-details-marker {
+	display: none;
+}
+
+.wiki-rubrique > summary::before {
+	content: '';
+	position: absolute;
+	top: 0.8em;
+	left: 0.35em;
+	width: 0.4em;
+	height: 0.4em;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	transform: rotate(-45deg);
+	transition: transform var(--transition);
+}
+
+.wiki-rubrique[open] > summary::before {
+	transform: rotate(45deg);
+	top: 0.7em;
+}
+
+.wiki-rubrique > summary:hover {
+	color: var(--lien-survol);
+}
+
+.wiki-rubrique > summary[aria-current="true"] {
+	color: var(--or-texte);
+}
+
+.wiki-rubrique > ul {
+	margin: 0 0 0.5em 0.5em;
+	padding-left: 0.35em;
+	border-left: 1px solid var(--bordure-douce);
+}
+
+/* Les pages consultées : une boîte à part, plus discrète que le sommaire */
+.wiki-consultees {
+	background: var(--surface-haute);
+	border-color: var(--bordure-douce);
+	box-shadow: none;
+}
+
+.dokuwiki .wiki-consultees > h2 {
+	color: var(--encre-douce);
+	font-size: 0.95em;
+}
+
+.wiki-consultees a {
+	font-size: 0.95em;
+}
+
+/* Sur un téléphone, la colonne se replie derrière un bouton, au-dessus de la page */
+.wiki-bascule {
+	display: none;
+}
+
+@media (max-width: __tablet_width__) {
+
+	.js .dokuwiki .wiki-bascule {
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		width: 100%;
+		padding: 0.5em 0.9em;
+		color: var(--or-texte);
+		font-family: var(--police-titre);
+		font-size: 1em;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-align: left;
+	}
+
+	.js .dokuwiki .wiki-bascule:hover {
+		background-color: var(--surface-haute);
+		color: var(--lien-survol);
+	}
+
+	.js .dokuwiki .wiki-bascule::before {
+		content: '';
+		width: 0.45em;
+		height: 0.45em;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(-45deg);
+		transition: transform var(--transition);
+	}
+
+	.js .dokuwiki .wiki-bascule[aria-expanded="true"]::before {
+		transform: rotate(45deg);
+	}
+
+	.js .wiki-bascule[aria-expanded="false"] + .wiki-navigation {
+		display: none;
+	}
+
+	.js .wiki-bascule[aria-expanded="true"] + .wiki-navigation {
+		margin-top: 0.75em;
+	}
+
+	/* Le bouton dit déjà « Sommaire » : le titre de la boîte ne reste que pour les lecteurs d'écran */
+	.js .dokuwiki .wiki-sommaire > h2 {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border: 0;
+	}
+}
+
+/* -- Table des matières : dans sa colonne, la partie en cours de lecture ----- */
+
+.wiki-toc #dw__toc {
+	float: none;
+	width: auto;
+	margin: 0;
+	font-size: 0.95em;
+}
+
+.dokuwiki #dw__toc a {
+	display: block;
+	padding: 0.1em 0.4em;
+	border-left: 3px solid transparent;
+	border-radius: 0 var(--rayon-s) var(--rayon-s) 0;
+}
+
+.dokuwiki #dw__toc a[aria-current="true"] {
+	color: var(--encre);
+	font-weight: 600;
+	background: var(--or-voile);
+	border-left-color: var(--or);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wiki-rubrique > summary::before,
+	.js .dokuwiki .wiki-bascule::before,
+	#dokuwiki__header .logo img {
+		transition: none;
+	}
 }
 
 /* Tableaux, sommaire, encadrés */
@@ -414,7 +747,6 @@ body {
 	color: var(--texte-sur-image);
 }
 
-#dokuwiki__footer .license,
 #dokuwiki__footer .buttons {
 	opacity: 0.8;
 }

@@ -1,7 +1,7 @@
 base   edenya
 author Edenya
-email    anika@selfthinker.org
-date     2015-07-26
+email    mouton@edenya.net
+date     2026-10-13
 name   Edenya V5
 desc   Thème du wiki accordé au site Edenya V5 (dérivé du thème DokuWiki)
 url      https://www.dokuwiki.org/template:dokuwiki

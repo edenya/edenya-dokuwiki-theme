@@ -17,37 +17,26 @@
 #dokuwiki__header {
     padding: 2em 0 1.5em;
 
-    .headings,
     .tools {
-        margin-bottom: 1.5em;
-        width: 49%;
-    }
-    .tools {
+        flex: 1 1 20em;
         margin-top: .2em;
     }
 
+    /* Le logo d'Edenya, « Le wiki » dessous (comme « Administration » au back-office) */
     .logo {
-        margin: 0;
-        font-size: 1.5em;
-        font-weight: normal;
-        line-height: 1.2;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        width: 245px;
+        max-width: 42vw;
+        text-decoration: none;
 
         img {
-            float: left;
-            margin-right: .5em;
-            height: 64px;
-            width: auto;
-        }
-
-        span {
             display: block;
-            padding-top: 10px;
-        }
-
-        a {
-            text-decoration: none;
-            color: @ini_text;
-            background-color: inherit;
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            max-height: 97px;
         }
     }
 
@@ -61,12 +50,6 @@
         color: @ini_link;
         background-color: inherit;
     }
-}
-
-[dir=rtl] #dokuwiki__header .logo img {
-    float: right;
-    margin-left: .5em;
-    margin-right: 0;
 }
 
 /* tools
@@ -169,34 +152,7 @@ form.search {
 
 /*____________ breadcrumbs ____________*/
 
-.dokuwiki div.breadcrumbs {
-    border-top: 1px solid @ini_border;
-    border-bottom: 1px solid @ini_background;
-    margin-bottom: .5em;
-    font-size: 0.875em;
-    clear: both;
-
-    div {
-        padding: .1em .35em;
-    }
-
-    div:only-child {
-        border-top: 1px solid @ini_background;
-        border-bottom: 1px solid @ini_border;
-    }
-
-    div:first-child {
-        border-top: 1px solid @ini_background;
-    }
-
-    div:last-child {
-        border-bottom: 1px solid @ini_border;
-    }
-
-    .bcsep {
-        font-size: 0.75em;
-    }
-}
+/* Le fil d'Ariane et les pages consultées du thème Edenya sont dans edenya.css */
 
 /* sidebar
 ********************************************************************/

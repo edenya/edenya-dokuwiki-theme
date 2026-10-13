@@ -11,3 +11,13 @@ $lang['__sidebar_width__'] = 'The width of the sidebar, if any (can be any lengt
 $lang['__tablet_width__']  = 'Below screensizes of this width, the site switches to tablet mode';
 $lang['__phone_width__']   = 'Below screensizes of this width, the site switches to phone mode';
 $lang['__theme_color__']   = 'Theme color of the web app';
+
+// Edenya theme navigation (Navigation.php)
+$lang['nom_du_wiki']  = 'Edenya\'s wiki';
+$lang['le_wiki']      = 'The wiki';
+$lang['le_site']      = 'Edenya\'s website';
+$lang['accueil_du_wiki'] = 'Wiki home';
+$lang['navigation']   = 'Wiki navigation';
+$lang['sommaire']     = 'Contents';
+$lang['vous_etes_ici'] = 'You are here';
+$lang['consultees']   = 'Recently visited';

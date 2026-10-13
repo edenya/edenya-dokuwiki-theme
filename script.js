@@ -32,35 +32,86 @@ function tpl_dokuwiki_mobile(){
 
     jQuery('html').removeClass(device_classes).addClass(device_class);
 
-    // handle some layout changes based on change in device
-    var $handle = jQuery('#dokuwiki__aside h3.toggle');
+    // La table des matières est dépliée à côté de la page, repliée au-dessus d'elle sur un téléphone
     var $toc = jQuery('#dw__toc h3');
+    if ($toc.length && $toc[0].setState) {
+        $toc[0].setState(device_class == 'desktop' ? 1 : -1);
+    }
+}
 
-    if (device_class == 'desktop') {
-        // reset for desktop mode
-        if($handle.length) {
-            $handle[0].setState(1);
-            $handle.hide();
+/**
+ * Sur un téléphone, la colonne de navigation (sommaire, pages consultées) se replie derrière son
+ * bouton ; la feuille de style ne la cache que si ce script tourne (classe js).
+ */
+function tpl_edenya_bascule(){
+    jQuery('#dokuwiki__aside .wiki-bascule').on('click', function () {
+        this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
+    });
+}
+
+/**
+ * Le titre de la table des matières la replie et la déplie : DokuWiki n'y répond qu'à la souris,
+ * il se prend aussi au clavier.
+ */
+function tpl_edenya_toc_clavier(){
+    jQuery('#dw__toc h3.toggle').attr({role: 'button', tabindex: 0}).on('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.click();
         }
-        if($toc.length) {
-            $toc[0].setState(1);
+    });
+}
+
+/**
+ * Dans la table des matières, la partie de la page qu'on lit (aria-current) : celle dont le titre
+ * est passé en haut de l'écran, la dernière quand on est au bas de la page. La colonne défile
+ * d'elle-même pour la garder en vue.
+ */
+function tpl_edenya_lecture(){
+    var liens = jQuery('#dw__toc a[href^="#"]').get();
+    var titres = liens.map(function (lien) {
+        return document.getElementById(decodeURIComponent(lien.hash.slice(1)));
+    });
+    if (!liens.length) return;
+
+    var colonne = document.querySelector('.wiki-toc');
+    var courant = null;
+    var attente = 0;
+
+    function marquer() {
+        attente = 0;
+        var rang = -1;
+        for (var i = 0; i < titres.length; i++) {
+            if (titres[i] && titres[i].getBoundingClientRect().top <= 90) rang = i;
+        }
+        var racine = document.documentElement;
+        if (window.scrollY > 0 && window.innerHeight + window.scrollY >= racine.scrollHeight - 2) {
+            rang = liens.length - 1;
+        }
+        var lien = rang >= 0 ? liens[rang] : null;
+        if (lien === courant) return;
+        if (courant) courant.removeAttribute('aria-current');
+        courant = lien;
+        if (!lien) return;
+        lien.setAttribute('aria-current', 'true');
+        // La colonne seule défile, jamais la page
+        if (colonne && colonne.scrollHeight > colonne.clientHeight) {
+            var place = colonne.getBoundingClientRect();
+            var item = lien.getBoundingClientRect();
+            if (item.top < place.top || item.bottom > place.bottom) {
+                colonne.scrollTop += item.top - place.top - colonne.clientHeight / 3;
+            }
         }
     }
-    if (device_class.match(/mobile/)){
-        // toc and sidebar hiding
-        if($handle.length) {
-            $handle.show();
-            $handle[0].setState(-1);
-        }
-        if($toc.length) {
-            $toc[0].setState(-1);
-        }
-    }
+
+    window.addEventListener('scroll', function () {
+        if (!attente) attente = window.requestAnimationFrame(marquer);
+    }, {passive: true});
+    marquer();
 }
 
 jQuery(function(){
     var resizeTimer;
-    dw_page.makeToggle('#dokuwiki__aside h3.toggle','#dokuwiki__aside div.content');
 
     tpl_dokuwiki_mobile();
     jQuery(window).on('resize',
@@ -70,17 +121,9 @@ jQuery(function(){
         }
     );
 
-    // increase sidebar length to match content (desktop mode only)
-    var sidebar_height = jQuery('.desktop #dokuwiki__aside').height();
-    var pagetool_height = jQuery('.desktop #dokuwiki__pagetools ul:first').height();
-    // pagetools div has no height; ul has a height
-    var content_min = Math.max(sidebar_height || 0, pagetool_height || 0);
-
-    var content_height = jQuery('#dokuwiki__content div.page').height();
-    if(content_min && content_min > content_height) {
-        var $content = jQuery('#dokuwiki__content div.page');
-        $content.css('min-height', content_min);
-    }
+    tpl_edenya_bascule();
+    tpl_edenya_toc_clavier();
+    tpl_edenya_lecture();
 
     // blur when clicked
     jQuery('#dokuwiki__pagetools div.tools>ul>li>a').on('click', function(){
