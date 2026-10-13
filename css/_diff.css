@@ -56,17 +56,17 @@
     font-weight: bold;
 }
 .dokuwiki table.diff .diff-addedline {
-    background-color: #cfc;
+    background-color: var(--succes-fond);
     color: black;
     width: ~"calc(50% - .7em)";
 }
 .dokuwiki table.diff .diff-deletedline {
-    background-color: #fdd;
+    background-color: var(--erreur-fond);
     color: black;
     width: ~"calc(50% - .7em)";
 }
 .dokuwiki table.diff td.diff-context {
-    background-color: #eee;
+    background-color: var(--background_alt);
     color: black;
     width: ~"calc(50% - .7em)";
 }

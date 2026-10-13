@@ -56,10 +56,10 @@
 }
 
 .dokuwiki form.changes li .sizechange.positive {
-    background-color: #cfc;;
+    background-color: var(--succes-fond);
 }
 .dokuwiki form.changes li .sizechange.negative {
-    background-color: #fdd;
+    background-color: var(--erreur-fond);
 }
 
 /*____________ page navigator ____________*/
