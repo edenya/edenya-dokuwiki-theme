@@ -6,7 +6,11 @@
  * Le logo d'Edenya mène à l'accueil du wiki ; c'est une image dans un lien, pas un titre (le h1
  * est celui de la page, comme sur le site). Où l'on est dans le wiki se lit dans le fil d'Ariane,
  * en tête de la page, et les pages consultées dans la colonne : le bandeau n'a plus de piste.
+ * La bascule du thème, à côté de la recherche, est celle du site (Theme.php).
  */
+
+use dokuwiki\template\edenya\Navigation;
+use dokuwiki\template\edenya\Theme;
 
 // must be run from within DokuWiki
 if (!defined('DOKU_INC')) die();
@@ -55,10 +59,10 @@ if (!defined('DOKU_INC')) die();
             <div class="mobileTools">
                 <?php echo (new \dokuwiki\Menu\MobileMenu())->getDropdown($lang['tools']); ?>
             </div>
+            <?php Theme::afficherBascule() ?>
             <ul>
                 <li class="wiki-site"><a href="<?php
-                    // Le site est à la racine du domaine, le wiki dans son dossier /wiki/
-                    echo hsc(preg_replace('#[^/]+/$#', '', DOKU_BASE)) ?>"><?php echo hsc(tpl_getLang('le_site')) ?></a></li>
+                    echo hsc(Navigation::getAdresseDuSite()) ?>"><?php echo hsc(tpl_getLang('le_site')) ?></a></li>
                 <?php echo (new \dokuwiki\Menu\SiteMenu())->getListItems('action ', false); ?>
             </ul>
         </div>

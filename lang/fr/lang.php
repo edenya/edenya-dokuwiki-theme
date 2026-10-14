@@ -27,3 +27,4 @@ $lang['navigation']            = 'Navigation du wiki';
 $lang['sommaire']              = 'Sommaire';
 $lang['vous_etes_ici']         = 'Vous êtes ici';
 $lang['consultees']            = 'Pages consultées';
+$lang['bascule_theme']         = 'Basculer entre le thème clair et le thème sombre';

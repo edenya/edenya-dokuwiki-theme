@@ -8,13 +8,16 @@
  * @license  GPL 2 (http://www.gnu.org/licenses/gpl.html)
  */
 
+use dokuwiki\template\edenya\Theme;
+
 // must be run from within DokuWiki
 if (!defined('DOKU_INC')) die();
 
 ?><!DOCTYPE html>
-<html lang="<?php echo $conf['lang']?>" dir="<?php echo $lang['direction'] ?>" class="no-js">
+<html lang="<?php echo $conf['lang']?>" dir="<?php echo $lang['direction'] ?>" class="no-js" data-theme="<?php echo hsc(Theme::getTheme()) ?>">
 <head>
     <meta charset="utf-8" />
+    <?php Theme::afficherAmorce() ?>
     <title>
         <?php echo hsc(tpl_img_getTag('IPTC.Headline', $IMG))?>
         [<?php echo strip_tags($conf['title'])?>]

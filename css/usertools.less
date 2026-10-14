@@ -13,19 +13,15 @@
         flex-direction: row-reverse;
         flex-wrap: nowrap;
 
+        /* À la couleur du lien, avec l'ombre de son texte : la couleur des bordures de DokuWiki
+           se perdait sur la forêt du bandeau */
         svg {
             height: 1.4em;
             width: 1.4em;
             vertical-align: middle;
-            fill: @ini_border;
+            fill: currentColor;
+            filter: drop-shadow(var(--ombre-texte-image));
             margin-right: 0.2em;
-        }
-    }
-
-    li.action a:hover,
-    li.action a:active {
-        svg {
-            fill: @ini_link;
         }
     }
 

@@ -125,15 +125,28 @@ form.search {
         padding: .35em 22px .35em .35em;
     }
 
+    /* Thème Edenya : la loupe est un masque teint à l'encre du champ, lisible dans les deux
+       thèmes (l'image grise de DokuWiki disparaissait sur le champ sombre) */
     button {
-        background: transparent url(images/search.png) no-repeat 0 0;
+        background: var(--encre-douce);
+        mask-image: url(images/search.svg);
+        mask-position: center;
+        mask-size: 16px 16px;
+        mask-repeat: no-repeat;
         border-width: 0;
-        width: 19px;
-        height: 14px;
+        border-radius: 0;
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
         text-indent: -99999px;
-        margin-left: -20px;
+        margin-left: -22px;
         box-shadow: none;
         padding: 0;
+    }
+
+    button:hover,
+    button:focus-visible {
+        background: var(--lien-survol);
     }
 }
 
@@ -143,9 +156,8 @@ form.search {
     }
 
     button {
-        background-position: 5px 0;
         margin-left: 0;
-        margin-right: -20px;
+        margin-right: -22px;
         position: relative;
     }
 }

@@ -14,15 +14,17 @@
  */
 
 use dokuwiki\template\edenya\Navigation;
+use dokuwiki\template\edenya\Theme;
 
 if (!defined('DOKU_INC')) die(); /* must be run from within DokuWiki */
 
 $hasSidebar = page_findnearest($conf['sidebar']);
 $avecNavigation = !in_array($ACT, Navigation::ACTIONS_PLEINE_LARGEUR);
 ?><!DOCTYPE html>
-<html lang="<?php echo $conf['lang'] ?>" dir="<?php echo $lang['direction'] ?>" class="no-js">
+<html lang="<?php echo $conf['lang'] ?>" dir="<?php echo $lang['direction'] ?>" class="no-js" data-theme="<?php echo hsc(Theme::getTheme()) ?>">
 <head>
     <meta charset="utf-8" />
+    <?php Theme::afficherAmorce() ?>
     <title><?php echo hsc(Navigation::getTitreDocument()) ?></title>
     <?php tpl_metaheaders() ?>
     <meta name="viewport" content="width=device-width,initial-scale=1" />

@@ -349,8 +349,14 @@ class Navigation
         return '<a href="' . wl($id) . '"' . ($courante ? ' aria-current="page"' : '') . '>' . $icone . hsc($libelle) . '</a>';
     }
 
-    protected static function icone(string $trace): string
+    /** L'adresse du site : il est à la racine du domaine, le wiki dans son dossier /wiki/. */
+    public static function getAdresseDuSite(): string
     {
-        return '<svg class="wiki-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="' . $trace . '"/></svg>';
+        return preg_replace('#[^/]+/$#', '', DOKU_BASE);
+    }
+
+    public static function icone(string $trace, string $classe = ''): string
+    {
+        return '<svg class="wiki-icone' . ($classe !== '' ? ' ' . $classe : '') . '" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="' . $trace . '"/></svg>';
     }
 }

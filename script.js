@@ -50,6 +50,39 @@ function tpl_edenya_bascule(){
 }
 
 /**
+ * La bascule du thème, celle du site (_scripts/edenya.ui.js) : elle passe du clair au sombre et
+ * inversement, et retient le choix là où le site le lit (Theme.php) : le cookie de tout le
+ * domaine, la mémoire du navigateur et, pour un joueur connecté au site, ses préférences.
+ */
+function tpl_edenya_theme(){
+    var racine = document.documentElement;
+
+    jQuery('#dokuwiki__header .wiki-theme').on('click', function () {
+        var theme = racine.getAttribute('data-theme');
+        if (theme === 'auto') {
+            theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'sombre' : 'clair';
+        }
+        theme = theme === 'sombre' ? 'clair' : 'sombre';
+        racine.setAttribute('data-theme', theme);
+
+        try {
+            localStorage.setItem(this.getAttribute('data-stockage'), theme);
+        } catch (e) {}
+        document.cookie = this.getAttribute('data-cookie') + '=' + theme + ';path=/;max-age=31536000;samesite=lax' +
+            (location.protocol === 'https:' ? ';secure' : '');
+
+        if (window.fetch) {
+            fetch(this.getAttribute('data-service'), {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'theme=' + encodeURIComponent(theme)
+            }).catch(function () {});
+        }
+    });
+}
+
+/**
  * Le titre de la table des matières la replie et la déplie : DokuWiki n'y répond qu'à la souris,
  * il se prend aussi au clavier.
  */
@@ -122,6 +155,7 @@ jQuery(function(){
     );
 
     tpl_edenya_bascule();
+    tpl_edenya_theme();
     tpl_edenya_toc_clavier();
     tpl_edenya_lecture();
 

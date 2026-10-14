@@ -4,7 +4,8 @@
  *	une couleur changée dans tokens.css se reporte ici.
  *
  *	style.ini renvoie les couleurs de DokuWiki (__text__, __link__…) vers ces variables ;
- *	le thème sombre suit la préférence du système (le wiki n'a pas de préférence de compte).
+ *	le thème (clair, sombre ou celui du système) est celui du site, que Theme.php pose sur
+ *	<html data-theme> et que sa bascule change des deux côtés.
  *
  *	Où l'on est se lit comme sur le site (.docs/DESIGN.md, « Où l'on est ») : le sommaire du
  *	wiki, en boîte dans la colonne, marque sa rubrique et la page affichée (aria-current, en gras
@@ -76,6 +77,7 @@
 	--police-mono: 'Cascadia Mono', Consolas, 'Courier New', monospace;
 	--rayon-s: 3px;
 	--rayon-m: 6px;
+	--rayon-gg: 20px;
 	--ombre-1: 0 1px 2px rgba(24, 14, 4, 0.18);
 	--ombre-2: 0 4px 14px rgba(24, 14, 4, 0.28);
 	--ombre-texte-image: 0 1px 3px rgba(0, 0, 0, 0.8);
@@ -86,11 +88,15 @@
 	--largeur-colonne: __sidebar_width__;
 	--largeur-toc: 15em;
 
+	--texture-sol: url(images/bg-ground.png);
 	--texture-claire: url(images/ground-light.jpg);
 	--foret-entete: url(images/foret_jour.png);
+	/* La texture du sol parle seule en thème clair, la couleur l'assombrit en sombre */
+	--melange-sol: normal;
 	--voile-surface: rgba(250, 240, 222, 0.12);
 
-	--fond-page: #6f5233;
+	/* La teinte moyenne de la texture du sol : elle ne se voit qu'avant la texture */
+	--fond-page: #ad8a64;
 	--parchemin: #f3e7cd;
 	--surface-haute: #fbf4e3;
 	--encre: #2c2016;
@@ -98,6 +104,8 @@
 	--encre-tenue: #6f5a3d;
 	--texte-sur-image: #f6ecd8;
 	--entete-panneau: rgba(0, 12, 0, 0.94);
+	--menu-texte-actif: #e6d08a;
+	--menu-fond-actif: rgba(0, 0, 0, 0.45);
 	--bordure: #b9915a;
 	--bordure-douce: rgba(112, 78, 36, 0.28);
 	--bordure-forte: #8a6633;
@@ -123,11 +131,53 @@
 	--info-fond: #dbe7f3;
 }
 
-/* -- Jetons : thème sombre (préférence du système) ------------------------- */
+/* -- Jetons : thème sombre ---------------------------------------------------
+ *	Comme sur le site (_styles/tokens.css) : choisi (data-theme="sombre"), ou celui du système
+ *	quand le visiteur a choisi de le suivre (data-theme="auto"). Theme.php pose le thème.
+ */
+
+:root[data-theme='sombre'] {
+	color-scheme: dark;
+	--melange-sol: multiply;
+	--texture-claire: url(images/ground-dark.jpg);
+	--foret-entete: url(images/foret_nuit.png);
+	--voile-surface: rgba(34, 25, 17, 0.88);
+
+	--fond-page: #1a130c;
+	--parchemin: #241a12;
+	--surface-haute: #2f2317;
+	--encre: #ecdcbe;
+	--encre-douce: #b9a382;
+	--encre-tenue: #94805f;
+	--bordure: #6d5432;
+	--bordure-douce: rgba(216, 178, 116, 0.22);
+	--bordure-forte: #8a6b3c;
+	--or: #d9a94a;
+	--or-clair: #f0c977;
+	--or-texte: #e7bb6a;
+	--or-voile: rgba(217, 169, 74, 0.16);
+	--surbrillance: rgba(217, 169, 74, 0.26);
+	--lien: #86cc92;
+	--lien-survol: #b2e5ba;
+	--lien-visite: #9dbb74;
+	--focus: #d9a94a;
+	--champ-fond: #17110b;
+	--champ-bordure: #6d5432;
+	--champ-texte: #ecdcbe;
+	--erreur: #ef9a90;
+	--erreur-fond: #3c1c17;
+	--succes: #9bd9a3;
+	--succes-fond: #17321a;
+	--alerte: #e8c477;
+	--alerte-fond: #3a2c10;
+	--info: #9cc3e8;
+	--info-fond: #17283a;
+}
 
 @media (prefers-color-scheme: dark) {
-	:root {
+	:root[data-theme='auto'] {
 		color-scheme: dark;
+		--melange-sol: multiply;
 		--texture-claire: url(images/ground-dark.jpg);
 		--foret-entete: url(images/foret_nuit.png);
 		--voile-surface: rgba(34, 25, 17, 0.88);
@@ -190,9 +240,16 @@
 
 /* -- Page ------------------------------------------------------------------ */
 
-html,
+/* Le sol du site : sa texture sur sa couleur, sous toute la page */
+html {
+	background-color: var(--fond-page);
+	background-image: var(--texture-sol);
+	background-repeat: repeat;
+	background-blend-mode: var(--melange-sol);
+}
+
 body {
-	background: var(--fond-page);
+	background: transparent;
 }
 
 body,
@@ -288,6 +345,72 @@ body {
 	background: var(--champ-fond);
 	color: var(--champ-texte);
 	border-color: var(--champ-bordure);
+}
+
+/*	La recherche et la bascule du thème côte à côte, les liens dessous (sur un téléphone,
+ *	mobile.less ajoute le menu des outils entre les deux) */
+#dokuwiki__sitetools {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 0.5em;
+}
+
+#dokuwiki__sitetools form.search {
+	margin: 0;
+}
+
+#dokuwiki__sitetools ul {
+	flex-basis: 100%;
+}
+
+/*	La bascule du thème, celle du site (_styles/layout.css) : l'icône montre le thème où l'on va */
+#dokuwiki__header .wiki-theme {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	margin: 0;
+	padding: 0;
+	border: 1px solid var(--bordure-forte);
+	border-radius: var(--rayon-gg);
+	background: var(--menu-fond-actif);
+	color: var(--menu-texte-actif);
+	font-size: 1rem;
+	line-height: 1;
+	cursor: pointer;
+	transition: color var(--transition), border-color var(--transition);
+}
+
+#dokuwiki__header .wiki-theme:hover {
+	background: var(--menu-fond-actif);
+	color: var(--or-clair);
+	border-color: var(--or-clair);
+}
+
+.wiki-theme__clair {
+	display: none;
+}
+
+:root[data-theme='sombre'] .wiki-theme__sombre {
+	display: none;
+}
+
+:root[data-theme='sombre'] .wiki-theme__clair {
+	display: inline;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root[data-theme='auto'] .wiki-theme__sombre {
+		display: none;
+	}
+
+	:root[data-theme='auto'] .wiki-theme__clair {
+		display: inline;
+	}
 }
 
 /* -- Contenu : parchemin -------------------------------------------------- */
@@ -633,7 +756,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
 	.wiki-rubrique > summary::before,
 	.js .dokuwiki .wiki-bascule::before,
-	#dokuwiki__header .logo img {
+	#dokuwiki__header .logo img,
+	#dokuwiki__header .wiki-theme {
 		transition: none;
 	}
 }

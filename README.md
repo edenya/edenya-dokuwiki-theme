@@ -14,7 +14,9 @@ Ce qu'il ajoute au thème d'origine :
 - **la table des matières** dans une colonne à droite, qui marque la partie en cours de lecture ;
 - une grille qui s'adapte aux écrans, du téléphone (sommaire derrière un bouton) aux écrans de
   2560px, avec les mêmes paliers que le site et le jeu ;
-- les liens du texte soulignés, comme sur le site, et un pied de page sans mention de licence.
+- les liens du texte soulignés, comme sur le site, et un pied de page sans mention de licence ;
+- **le thème du site**, clair, sombre ou celui du système, et le même bouton pour en changer : un
+  thème choisi au wiki se retrouve sur le site, et l'inverse (voir « Le thème clair ou sombre »).
 
 Les règles de style du thème sont décrites dans la documentation du site, `.docs/DESIGN.md` §12.
 
@@ -66,7 +68,7 @@ Pour un DokuWiki installé ailleurs, partir de son propre dossier.
 6. **Vérifier** : ouvrir l'accueil du wiki, puis une page citée par son sommaire. Le sommaire doit
    ouvrir la rubrique de la page, le fil d'Ariane la situer, et la table des matières suivre le
    défilement. Regarder aussi une largeur de téléphone (le bouton « Sommaire ») et le thème sombre
-   du système.
+   (le bouton à côté de la recherche).
 
 ## Les réglages du wiki
 
@@ -81,6 +83,19 @@ Ils se font dans `wiki/conf/local.php` ou par Administration > Paramètres de co
 | `$conf['sidebar']` | Une page facultative (`sidebar` par défaut) : si elle existe, elle s'affiche dans la colonne, sous les pages consultées. |
 | `$conf['youarehere']` | Inutile : le thème a son propre fil d'Ariane. |
 | `$conf['license']` | Le thème ne l'affiche pas. DokuWiki la montre encore sous le formulaire de modification, à qui peut écrire. |
+
+Le manifeste (`lib/exe/manifest.php`) prend sa couleur de fond dans `style.ini`, où les couleurs
+sont des variables CSS qu'il ne comprend pas (« 'var(--surface-haute)' is not a valid color »). Le
+navigateur la lit avant toute feuille de style, pour l'écran de lancement du wiki installé comme
+application : elle ne peut pas suivre le thème. Elle s'écrit donc en dur, dans
+`wiki/conf/manifest.local.json` (que les mises à jour de DokuWiki gardent), la couleur du sol clair
+du site :
+
+```json
+{
+    "background_color": "#ad8a64"
+}
+```
 
 Les largeurs de la page et de la colonne, et celle où le thème passe en mode téléphone, sont dans
 `style.ini` (`__site_width__`, `__sidebar_width__`, `__tablet_width__`) ; les paliers des écrans
@@ -107,6 +122,25 @@ Le thème garde le sommaire dans le cache de DokuWiki jusqu'au prochain enregist
 (n'importe laquelle), au prochain changement de la configuration du wiki ou de `Navigation.php` :
 une modification de l'accueil se voit aussitôt.
 
+## Le thème clair ou sombre
+
+Le wiki prend le thème du site d'Edenya, qui le retient à trois endroits : le cookie `edenya_theme`
+(tout le domaine), la mémoire du navigateur (`localStorage['edenya-theme']`) et, pour un joueur
+connecté au site, ses préférences.
+
+- La page est rendue dans le thème du cookie (`Theme.php`) ; son amorce, en tête de page, prend
+  avant l'affichage celui de la mémoire du navigateur, où le site recopie la préférence du joueur
+  connecté. Sans choix, c'est le thème par défaut du site, le clair.
+- Le bouton, à côté de la recherche, passe du clair au sombre et inversement (`script.js`) : il
+  écrit le cookie et la mémoire du navigateur, et envoie le choix au service du site
+  (`_services/theme.php`, à la racine du domaine), qui l'enregistre dans les préférences d'un
+  joueur connecté au site. Le wiki doit donc être servi sur le même domaine que le site, dans son
+  dossier.
+- « Comme mon système » se choisit sur le site (Votre compte, Affichage) ; le wiki le suit.
+
+Pour un wiki installé hors du site d'Edenya, le service ne répond pas (le bouton n'en tient pas
+compte) et le thème reste retenu par le navigateur.
+
 ## Mettre à jour
 
 ```bash
@@ -127,7 +161,8 @@ version peut demander de l'adapter.
 | `main.php` | Le gabarit des pages : le contenu d'abord dans le code, puis la colonne de navigation et la table des matières, que la grille remet à leur place. |
 | `tpl_header.php`, `tpl_footer.php` | Le bandeau (logo, connexion, recherche, outils) et le pied de page, partagés avec `detail.php` (le détail d'une image) et `mediamanager.php`. |
 | `Navigation.php` | Le sommaire, le fil d'Ariane, les pages consultées et le titre des onglets (`dokuwiki\template\edenya\Navigation`, chargée par DokuWiki). |
-| `script.js` | Le bouton « Sommaire » sur téléphone, la table des matières au clavier et la partie en cours de lecture. |
+| `Theme.php` | Le thème clair ou sombre du site : celui de la page, l'amorce et le bouton de bascule. |
+| `script.js` | Le bouton « Sommaire » sur téléphone, la bascule du thème, la table des matières au clavier et la partie en cours de lecture. |
 | `style.ini` | La liste des feuilles de style et les couleurs de DokuWiki, renvoyées vers les jetons du site. |
 | `css/edenya.css` | Les jetons du site (couleurs, polices, ombres, largeurs) et tout ce qui est propre à Edenya. |
 | `css/structure.less` | La grille de la page et ses paliers. |
@@ -139,7 +174,11 @@ version peut demander de l'adapter.
 
 - Le wiki ne charge pas les feuilles du site : `css/edenya.css` recopie les jetons de
   `_styles/tokens.css`, sous les mêmes noms. Une couleur changée sur le site se reporte ici, dans
-  le bloc clair et dans le bloc sombre.
+  les trois blocs, comme sur le site : le clair (`:root`), le sombre choisi
+  (`:root[data-theme='sombre']`) et le sombre du système (`auto`, sous `prefers-color-scheme`).
+- Une icône prend la couleur d'un jeton : un SVG en ligne (`fill: currentColor`) ou, quand DokuWiki
+  la dessine par une feuille (la loupe de la recherche), un masque (`mask-image`) teint par le fond.
+  Jamais une image d'une seule couleur, qui disparaît dans l'un des deux thèmes.
 - DokuWiki fait passer toutes les feuilles, `.css` compris, par son compilateur LESS. Deux pièges :
   ne jamais écrire `@media only screen` dans une feuille déjà réservée à l'écran (cela donne une
   requête invalide, ignorée par le navigateur), et protéger un `calc()` qui mélange les unités :

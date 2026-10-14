@@ -21,3 +21,4 @@ $lang['navigation']   = 'Wiki navigation';
 $lang['sommaire']     = 'Contents';
 $lang['vous_etes_ici'] = 'You are here';
 $lang['consultees']   = 'Recently visited';
+$lang['bascule_theme'] = 'Switch between the light and the dark theme';
