@@ -16,7 +16,9 @@ Ce qu'il ajoute au thème d'origine :
   2560px, avec les mêmes paliers que le site et le jeu ;
 - les liens du texte soulignés, comme sur le site, et un pied de page sans mention de licence ;
 - **le thème du site**, clair, sombre ou celui du système, et le même bouton pour en changer : un
-  thème choisi au wiki se retrouve sur le site, et l'inverse (voir « Le thème clair ou sombre »).
+  thème choisi au wiki se retrouve sur le site, et l'inverse (voir « Le thème clair ou sombre ») ;
+- **une invitation à jouer** en tête des pages, pour qui ne joue pas encore, et pour qui joue, le
+  retour sur le site ou en jeu en tête de la colonne (voir « Qui joue, qui ne joue pas »).
 
 Les règles de style du thème sont décrites dans la documentation du site, `.docs/DESIGN.md` §12.
 
@@ -141,6 +143,29 @@ connecté au site, ses préférences.
 Pour un wiki installé hors du site d'Edenya, le service ne répond pas (le bouton n'en tient pas
 compte) et le thème reste retenu par le navigateur.
 
+## Qui joue, qui ne joue pas
+
+Le wiki ne connaît pas les comptes du site : les siens sont ceux du staff. Pour savoir si le
+visiteur joue, il lit deux cookies que le site pose sur tout le domaine, qui ne disent pas qui
+joue (`Visiteur.php`) :
+
+| Cookie | Ce qu'il dit |
+|--------|--------------|
+| `cache_connecte` | Un joueur est connecté au site. Le site le renouvelle à chaque page tant que la session vit, il dure ce que dure une session sans activité, et la déconnexion l'efface. |
+| `cache_r` | Ce joueur sera reconnecté tout seul (« se souvenir de moi ») à sa prochaine page du site, tant qu'il ne se déconnecte pas. |
+
+- **Qui joue** (l'un ou l'autre cookie) a, en tête de la colonne, une boîte pour retourner sur le
+  site (son accueil) ou en jeu (la page « Jouer » du site, qui ouvre le choix du personnage).
+  Elle est avant le bouton « Sommaire » : sur un téléphone, elle reste visible.
+- **Qui ne joue pas** a, au-dessus de la page, un bandeau qui invite à rejoindre Edenya
+  (l'inscription du site), et un lien vers la connexion, pour qui a déjà un compte. Il ne
+  s'affiche qu'à la lecture (une page, la recherche, l'index), jamais en modification ni dans
+  l'administration, ni pour le staff connecté au wiki, et pas à l'impression.
+
+Ce n'est qu'un indice : un cookie effacé fait revenir le bandeau, et il ne protège rien. Les
+textes sont dans `lang/fr/lang.php` (`invitation_*`, `retour*`). Pour un wiki installé hors du
+site d'Edenya, ces cookies n'existent pas : tous les visiteurs voient le bandeau.
+
 ## Mettre à jour
 
 ```bash
@@ -162,6 +187,7 @@ version peut demander de l'adapter.
 | `tpl_header.php`, `tpl_footer.php` | Le bandeau (logo, connexion, recherche, outils) et le pied de page, partagés avec `detail.php` (le détail d'une image) et `mediamanager.php`. |
 | `Navigation.php` | Le sommaire, le fil d'Ariane, les pages consultées et le titre des onglets (`dokuwiki\template\edenya\Navigation`, chargée par DokuWiki). |
 | `Theme.php` | Le thème clair ou sombre du site : celui de la page, l'amorce et le bouton de bascule. |
+| `Visiteur.php` | Qui joue, d'après les cookies du site : l'invitation à jouer en tête des pages, ou le retour sur le site et en jeu en tête de la colonne. |
 | `script.js` | Le bouton « Sommaire » sur téléphone, la bascule du thème, la table des matières au clavier et la partie en cours de lecture. |
 | `style.ini` | La liste des feuilles de style et les couleurs de DokuWiki, renvoyées vers les jetons du site. |
 | `css/edenya.css` | Les jetons du site (couleurs, polices, ombres, largeurs) et tout ce qui est propre à Edenya. |

@@ -15,6 +15,7 @@
 
 use dokuwiki\template\edenya\Navigation;
 use dokuwiki\template\edenya\Theme;
+use dokuwiki\template\edenya\Visiteur;
 
 if (!defined('DOKU_INC')) die(); /* must be run from within DokuWiki */
 
@@ -44,6 +45,8 @@ $avecNavigation = !in_array($ACT, Navigation::ACTIONS_PLEINE_LARGEUR);
             <main id="dokuwiki__content"><div class="pad group">
                 <?php html_msgarea() ?>
 
+                <?php Visiteur::afficherInvitation() ?>
+
                 <div class="page group">
                     <?php tpl_flush() ?>
                     <?php Navigation::afficherFilAriane() ?>
@@ -64,6 +67,7 @@ $avecNavigation = !in_array($ACT, Navigation::ACTIONS_PLEINE_LARGEUR);
             <?php if ($avecNavigation) : ?>
                 <!-- ********** NAVIGATION ********** -->
                 <aside id="dokuwiki__aside" aria-label="<?php echo hsc(tpl_getLang('navigation')) ?>">
+                    <?php Visiteur::afficherRetours() ?>
                     <button type="button" class="wiki-bascule" aria-expanded="false" aria-controls="wiki-navigation">
                         <?php echo hsc(tpl_getLang('sommaire')) ?>
                     </button>

@@ -129,6 +129,16 @@
 	--alerte-fond: #f8ecc9;
 	--info: #24557f;
 	--info-fond: #dbe7f3;
+	--reflet-bouton: inset 0 1px 0 rgba(255, 226, 168, 0.18);
+	--appel-fond: #1f4d2c;
+	--appel-bordure: #c79a3f;
+	--appel-texte: #f6ecd8;
+	--appel-titre: #f0c977;
+	--appel-lien: #b4e3bb;
+	--appel-bouton-fond: linear-gradient(180deg, #ecc463 0%, #c99a3c 100%);
+	--appel-bouton-fond-survol: linear-gradient(180deg, #f5d488 0%, #dcae4e 100%);
+	--appel-bouton-texte: #2c1d08;
+	--appel-bouton-bordure: #7a5518;
 }
 
 /* -- Jetons : thème sombre ---------------------------------------------------
@@ -172,6 +182,9 @@
 	--alerte-fond: #3a2c10;
 	--info: #9cc3e8;
 	--info-fond: #17283a;
+	--appel-fond: #1b4527;
+	--appel-bordure: #d9a94a;
+	--appel-texte: #ecdcbe;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -211,6 +224,9 @@
 		--alerte-fond: #3a2c10;
 		--info: #9cc3e8;
 		--info-fond: #17283a;
+		--appel-fond: #1b4527;
+		--appel-bordure: #d9a94a;
+		--appel-texte: #ecdcbe;
 	}
 }
 
@@ -520,6 +536,96 @@ body {
 	font-weight: 600;
 }
 
+/* -- L'invitation à jouer (Invitation.php), au-dessus de la page -------------
+ *	Pour qui ne joue pas encore : un encart d'appel (les jetons --appel-*, vert forêt au filet
+ *	doré, qui tranche sur le parchemin comme sur le brun du thème sombre), un bouton doré et un
+ *	lien souligné pour qui a déjà un compte.
+ */
+
+.wiki-invitation {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75em 1.5em;
+	margin-bottom: 1em;
+	padding: 1em 1.25em;
+	background: var(--appel-fond);
+	color: var(--appel-texte);
+	border: 1px solid var(--appel-bordure);
+	border-left-width: 4px;
+	border-radius: var(--rayon-m);
+	box-shadow: var(--ombre-2);
+}
+
+.dokuwiki .wiki-invitation a:focus-visible {
+	outline-color: var(--appel-titre);
+}
+
+.dokuwiki .wiki-invitation p {
+	margin: 0;
+}
+
+.wiki-invitation__texte {
+	flex: 1 1 22em;
+}
+
+.dokuwiki .wiki-invitation .wiki-invitation__titre {
+	margin-bottom: 0.2em;
+	color: var(--appel-titre);
+	font-family: var(--police-titre);
+	font-size: 1.25em;
+	font-weight: 600;
+	line-height: 1.25;
+}
+
+.dokuwiki .wiki-invitation .wiki-invitation__liens {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5em 1.25em;
+}
+
+.dokuwiki a.wiki-invitation__bouton:link,
+.dokuwiki a.wiki-invitation__bouton:visited {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 2.4rem;
+	padding: 0.35em 1.2em;
+	border: 1px solid var(--appel-bouton-bordure);
+	border-radius: var(--rayon-s);
+	background: var(--appel-bouton-fond);
+	color: var(--appel-bouton-texte);
+	font-family: var(--police-titre);
+	font-size: 0.875rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-decoration: none;
+	text-transform: uppercase;
+	box-shadow: var(--ombre-1), var(--reflet-bouton);
+	transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+
+.dokuwiki a.wiki-invitation__bouton:hover,
+.dokuwiki a.wiki-invitation__bouton:focus-visible {
+	background: var(--appel-bouton-fond-survol);
+	color: var(--appel-bouton-texte);
+	transform: translateY(-1px);
+}
+
+/* Le lien de qui a déjà un compte : souligné, comme les liens du texte */
+.dokuwiki .wiki-invitation__liens a:not(.wiki-invitation__bouton) {
+	text-decoration: underline;
+	text-decoration-color: var(--bordure);
+	text-underline-offset: 0.15em;
+}
+
+.dokuwiki .wiki-invitation__liens a:not(.wiki-invitation__bouton):is(:link, :visited, :hover, :focus) {
+	color: var(--appel-lien);
+	text-decoration-color: currentColor;
+}
+
 .wiki-icone {
 	flex: none;
 	width: 1.15em;
@@ -574,7 +680,8 @@ body {
 	margin: 0;
 }
 
-.wiki-navigation a {
+.wiki-navigation a,
+.wiki-retours a {
 	display: flex;
 	align-items: center;
 	gap: 0.35em;
@@ -584,8 +691,28 @@ body {
 	line-height: 1.3;
 }
 
-.wiki-navigation a:hover {
+.wiki-navigation a:hover,
+.wiki-retours a:hover {
 	background: var(--or-voile);
+}
+
+/*	Pour qui joue (Visiteur.php), en tête de la colonne : retourner sur le site ou en jeu. Avant
+ *	le bouton « Sommaire », l'encart reste visible sur un téléphone, ses deux liens côte à côte. */
+.wiki-retours {
+	margin-bottom: 1em;
+	padding: 0.5em 0.75em;
+}
+
+.dokuwiki .wiki-retours a {
+	font-weight: 600;
+}
+
+@media (max-width: __tablet_width__) {
+	.wiki-retours ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25em 1em;
+	}
 }
 
 /* La page où l'on est : en gras à l'encre (le sommaire du site), et un trait doré devant */
@@ -757,7 +884,9 @@ body {
 	.wiki-rubrique > summary::before,
 	.js .dokuwiki .wiki-bascule::before,
 	#dokuwiki__header .logo img,
-	#dokuwiki__header .wiki-theme {
+	#dokuwiki__header .wiki-theme,
+	.dokuwiki a.wiki-invitation__bouton:link,
+	.dokuwiki a.wiki-invitation__bouton:visited {
 		transition: none;
 	}
 }

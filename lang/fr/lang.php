@@ -28,3 +28,13 @@ $lang['sommaire']              = 'Sommaire';
 $lang['vous_etes_ici']         = 'Vous êtes ici';
 $lang['consultees']            = 'Pages consultées';
 $lang['bascule_theme']         = 'Basculer entre le thème clair et le thème sombre';
+
+// L'invitation à jouer et les retours vers le site et le jeu (Visiteur.php)
+$lang['invitation']            = 'Rejoindre Edenya';
+$lang['invitation_titre']      = 'Edenya se lit, mais surtout se joue';
+$lang['invitation_texte']      = 'Un jeu de rôle médiéval-fantastique gratuit, en ligne depuis 2002, où chacun écrit l\'histoire de son personnage avec celles des autres. Ce wiki vous en apprend les règles ; Vahal vous apprendra le reste.';
+$lang['invitation_inscription'] = 'Rejoindre Edenya';
+$lang['invitation_connexion']  = 'J\'ai déjà un compte';
+$lang['retours']               = 'Retourner sur Edenya';
+$lang['retour_site']           = 'Retour sur le site';
+$lang['retour_jeu']            = 'Retour en jeu';
