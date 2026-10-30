@@ -27,8 +27,8 @@ if (!defined('DOKU_INC')) die();
 
     <div class="headings group">
         <a class="logo" href="<?php echo wl() ?>" rel="home" accesskey="h" title="<?php
-            echo hsc(tpl_getLang('accueil_du_wiki')) ?> [h]"><img src="<?php echo tpl_basedir() ?>images/edenya.webp"
-            width="460" height="200" alt="Edenya" /><span><?php echo hsc(tpl_getLang('le_wiki')) ?></span></a>
+            echo hsc(tpl_getLang('accueil_du_wiki')) ?> [h]"><img src="<?php echo tpl_basedir() ?>images/edenya-logo.png"
+            width="490" height="201" alt="Edenya" /><span><?php echo hsc(tpl_getLang('le_wiki')) ?></span></a>
         <?php if ($conf['tagline']) : ?>
             <p class="claim"><?php echo $conf['tagline']; ?></p>
         <?php endif ?>
