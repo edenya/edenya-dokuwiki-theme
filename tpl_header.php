@@ -3,7 +3,7 @@
 /**
  * Template header, included in the main and detail files
  *
- * Le logo d'Edenya mène à l'accueil du wiki ; c'est une image dans un lien, pas un titre (le h1
+ * Le logo d'Edenya (tpl_logo.php) mène à l'accueil du wiki ; c'est un dessin dans un lien, pas un titre (le h1
  * est celui de la page, comme sur le site). Où l'on est dans le wiki se lit dans le fil d'Ariane,
  * en tête de la page, et les pages consultées dans la colonne : le bandeau n'a plus de piste.
  * La bascule du thème, à côté de la recherche, est celle du site (Theme.php).
@@ -27,8 +27,8 @@ if (!defined('DOKU_INC')) die();
 
     <div class="headings group">
         <a class="logo" href="<?php echo wl() ?>" rel="home" accesskey="h" title="<?php
-            echo hsc(tpl_getLang('accueil_du_wiki')) ?> [h]"><img src="<?php echo tpl_basedir() ?>images/edenya-logo.png"
-            width="490" height="201" alt="Edenya" /><span><?php echo hsc(tpl_getLang('le_wiki')) ?></span></a>
+            echo hsc(tpl_getLang('accueil_du_wiki')) ?> [h]"><?php include(__DIR__ . '/tpl_logo.php') ?><span><?php
+            echo hsc(tpl_getLang('le_wiki')) ?></span></a>
         <?php if ($conf['tagline']) : ?>
             <p class="claim"><?php echo $conf['tagline']; ?></p>
         <?php endif ?>

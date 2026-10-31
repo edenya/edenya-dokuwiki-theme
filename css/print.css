@@ -151,13 +151,18 @@ th {
     text-decoration: none;
     border-width: 0;
 }
-#dokuwiki__header .logo img {
+#dokuwiki__header .logo svg {
     float: left;
     margin-right: .5em;
     height: 64px;
     width: auto;
 }
-[dir=rtl] #dokuwiki__header .logo img {
+/* Sans les couleurs de l'écran (edenya.css), le dessin s'imprime à l'encre : le nœud s'efface
+   derrière le nom. */
+#dokuwiki__header .logo-edenya__noeud {
+    opacity: .3;
+}
+[dir=rtl] #dokuwiki__header .logo svg {
     float: right;
     margin-right: 0;
     margin-left: .5em;
