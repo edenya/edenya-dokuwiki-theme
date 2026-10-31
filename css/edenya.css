@@ -541,6 +541,34 @@ body {
 	text-decoration-color: var(--lien-survol);
 }
 
+/*	Les puces d'une liste : le losange du menu du site (_styles/components.css, .puces), dessiné
+ *	plutôt qu'écrit pour ne pas dépendre de la police, plein, et vide dans une liste imbriquée.
+ *	L'index des pages (ul.idx) garde ses dossiers. */
+.dokuwiki :is(div.page, div.preview) ul:not(.idx) > li[class*='level'],
+#dw__toc ul > li:not(.clear) {
+	position: relative;
+	list-style: none;
+}
+
+.dokuwiki :is(div.page, div.preview) ul:not(.idx) > li[class*='level']::before,
+#dw__toc ul > li:not(.clear)::before {
+	content: '';
+	position: absolute;
+	top: ~"calc(0.5lh - 0.18em)";
+	left: -1em;
+	box-sizing: border-box;
+	width: 0.36em;
+	height: 0.36em;
+	background: var(--or);
+	transform: rotate(45deg);
+}
+
+.dokuwiki :is(div.page, div.preview) ul:not(.idx) ul > li[class*='level']::before,
+#dw__toc ul ul > li:not(.clear)::before {
+	background: none;
+	border: 1px solid var(--or);
+}
+
 /* -- Fil d'Ariane : où l'on est dans le sommaire, en tête de la page --------- */
 
 .wiki-fil-ariane {
@@ -698,7 +726,7 @@ body {
 	font-size: 0.95em;
 }
 
-/* Le titre d'une boîte : centré sur un filet, une étoile dessous (les boîtes du site) */
+/* Le titre d'une boîte : centré sur un filet, un losange dessous (les boîtes du site) */
 .dokuwiki .wiki-boite > h2 {
 	display: flex;
 	flex-wrap: wrap;
@@ -713,12 +741,14 @@ body {
 	text-align: center;
 }
 
+/* Ses marges remplissent la ligne : le losange passe seul dessous, au milieu. */
 .dokuwiki .wiki-boite > h2::after {
-	content: '\2726';
-	flex-basis: 100%;
-	color: var(--bordure);
-	font-size: 0.7em;
-	line-height: 1;
+	content: '';
+	flex: 0 0 0.36em;
+	height: 0.36em;
+	margin: 0.1em ~"calc(50% - 0.18em)" 0;
+	background: var(--bordure);
+	transform: rotate(45deg);
 }
 
 .wiki-boite ul,
@@ -923,6 +953,11 @@ body {
 	padding: 0.1em 0.4em;
 	border-left: 3px solid transparent;
 	border-radius: 0 var(--rayon-s) var(--rayon-s) 0;
+}
+
+/* Le losange de l'entrée suit le texte du lien, que la ligne et le lien abaissent. */
+#dw__toc ul > li:not(.clear)::before {
+	top: ~"calc(0.5lh + 0.3em)";
 }
 
 .dokuwiki #dw__toc a[aria-current="true"] {
